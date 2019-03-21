@@ -27,6 +27,12 @@ static RCTRootView *rootView = nil;
 #define PROGRESS_Y TIP_TEXT_Y + 30
 #define PROGRESS_WIDTH 225
 #define PROGRESS_HEIGHT 1
+#define IPHONE_X \
+({BOOL isPhoneX = NO;\
+if (@available(iOS 11.0, *)) {\
+isPhoneX = [[UIApplication sharedApplication] delegate].window.safeAreaInsets.bottom > 0.0;\
+}\
+(isPhoneX);})
 
 @interface RNKitSplashScreen()
 @property (nonatomic, strong) UIProgressView *progressView;
@@ -162,7 +168,11 @@ static CGFloat edgeSizeWithRadius(CGFloat cornerRadius) {
         if (_splashImage) {
             _bgImageView.image = _splashImage;
         } else {
-            _bgImageView.image = [UIImage imageNamed:@"splash.png"];
+            if (IPHONE_X) {
+                _bgImageView.image = [UIImage imageNamed:@"splash_ihonex"];
+            } else {
+                _bgImageView.image = [UIImage imageNamed:@"splash_ihone6"];
+            }
         }
     }
     return _bgImageView;
